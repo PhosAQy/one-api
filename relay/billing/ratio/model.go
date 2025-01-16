@@ -91,6 +91,9 @@ var ModelRatio = map[string]float64{
 	"claude-3-5-sonnet-20240620": 3.0 / 1000 * USD,
 	"claude-3-5-sonnet-20241022": 3.0 / 1000 * USD,
 	"claude-3-opus-20240229":     15.0 / 1000 * USD,
+	"amazon.nova-micro":  0.13125 / 1000 * USD,
+	"amazon.nova-lite":   0.225 / 1000 * USD,
+	"amazon.nova-pro":    3.0 / 1000 * USD,
 	// https://cloud.baidu.com/doc/WENXINWORKSHOP/s/hlrk4akp7
 	"ERNIE-4.0-8K":       0.120 * RMB,
 	"ERNIE-3.5-8K":       0.012 * RMB,
