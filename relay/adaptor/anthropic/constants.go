@@ -9,4 +9,7 @@ var ModelList = []string{
 	"claude-3-5-sonnet-20240620",
 	"claude-3-5-sonnet-20241022",
 	"claude-3-5-sonnet-latest",
+	"amazon.nova-micro",
+	"amazon.nova-lite",
+	"amazon.nova-pro",
 }
