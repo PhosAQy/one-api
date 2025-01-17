@@ -39,7 +39,7 @@ func GetAdaptor(model string) utils.AwsAdapter {
 	case AwsLlama3:
 		return &llama3.Adaptor{}
 	case AwsNova:
-		return &llama3.Adaptor{}
+		return &nova.Adaptor{}
 	default:
 		return nil
 	}
