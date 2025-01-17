@@ -31,7 +31,11 @@ func (a *Adaptor) ConvertRequest(c *gin.Context, relayMode int, request *model.G
 		InferenceConfig: InferenceConfig{
 			MaxNewTokens: request.MaxTokens,
 		},
-		System: []SystemMessage{}, // 初始化为空数组而不是nil
+		System: []SystemMessage{
+			{
+				Text: "You are a helpful AI assistant.", // 添加默认的系统消息
+			},
+		},
 	}
 	jsonBytes, _ := json.Marshal(request)
 	logger.SysLogf("request: %s", string(jsonBytes))
