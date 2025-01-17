@@ -26,14 +26,15 @@ func (a *Adaptor) ConvertRequest(c *gin.Context, relayMode int, request *model.G
 	if request == nil {
 		return nil, errors.New("request is nil")
 	}
-	jsonBytes, _ := json.Marshal(request)
-	logger.SysLogf("request: %s", string(jsonBytes))
 	// 创建Nova请求结构
 	novaRequest := &Request{
 		InferenceConfig: InferenceConfig{
 			MaxNewTokens: request.MaxTokens,
 		},
+		System: []SystemMessage{}, // 初始化为空数组而不是nil
 	}
+	jsonBytes, _ := json.Marshal(request)
+	logger.SysLogf("request: %s", string(jsonBytes))
 
 	// 安全处理可能为nil的字段
 	if request.Temperature != nil {
@@ -151,6 +152,9 @@ func (a *Adaptor) ConvertRequest(c *gin.Context, relayMode int, request *model.G
 
 		novaRequest.Messages = append(novaRequest.Messages, novaMessage)
 	}
+	// 在发送请求前，再次确认转换后的请求格式
+	convertedJson, _ := json.MarshalIndent(novaRequest, "", "  ")
+	logger.SysLogf("converted request: \n%s", string(convertedJson))
 
 	c.Set(ctxkey.RequestModel, request.Model)
 	c.Set(ctxkey.ConvertedRequest, novaRequest)
