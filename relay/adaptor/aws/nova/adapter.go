@@ -28,12 +28,17 @@ func (a *Adaptor) ConvertRequest(c *gin.Context, relayMode int, request *model.G
 	// 创建Nova请求结构
 	novaRequest := Request{
 		InferenceConfig: InferenceConfig{
-			MaxNewTokens:  request.MaxTokens,
-			Temperature:   *request.Temperature,
-			TopP:          *request.TopP,
-			TopK:          request.TopK,
-			StopSequences: request.Stop.([]string),
+			MaxNewTokens: request.MaxTokens,
+			Temperature:  *request.Temperature,
+			TopP:         *request.TopP,
+			TopK:         request.TopK,
 		},
+	}
+	// 安全处理 Stop 序列
+	if request.Stop != nil {
+		if stopSequences, ok := request.Stop.([]string); ok {
+			novaRequest.InferenceConfig.StopSequences = stopSequences
+		}
 	}
 
 	// 处理工具调用
