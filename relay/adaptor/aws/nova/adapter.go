@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/songquanpeng/one-api/common/ctxkey"
 	"github.com/songquanpeng/one-api/common/image"
+	"github.com/songquanpeng/one-api/common/logger"
 	"github.com/songquanpeng/one-api/relay/adaptor"
 	"github.com/songquanpeng/one-api/relay/adaptor/aws/utils"
 	"github.com/songquanpeng/one-api/relay/meta"
@@ -24,15 +25,23 @@ func (a *Adaptor) ConvertRequest(c *gin.Context, relayMode int, request *model.G
 	if request == nil {
 		return nil, errors.New("request is nil")
 	}
-
+	logger.SysLogf("request: %s", request)
 	// 创建Nova请求结构
 	novaRequest := Request{
 		InferenceConfig: InferenceConfig{
 			MaxNewTokens: request.MaxTokens,
-			Temperature:  *request.Temperature,
-			TopP:         *request.TopP,
-			TopK:         request.TopK,
 		},
+	}
+
+	// 安全处理可能为nil的字段
+	if request.Temperature != nil {
+		novaRequest.InferenceConfig.Temperature = *request.Temperature
+	}
+	if request.TopP != nil {
+		novaRequest.InferenceConfig.TopP = *request.TopP
+	}
+	if request.TopK != 0 {
+		novaRequest.InferenceConfig.TopK = request.TopK
 	}
 	// 安全处理 Stop 序列
 	if request.Stop != nil {
