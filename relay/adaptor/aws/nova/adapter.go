@@ -1,6 +1,7 @@
 package aws
 
 import (
+	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -25,9 +26,10 @@ func (a *Adaptor) ConvertRequest(c *gin.Context, relayMode int, request *model.G
 	if request == nil {
 		return nil, errors.New("request is nil")
 	}
-	logger.SysLogf("request: %s", request)
+	jsonBytes, _ := json.Marshal(request)
+	logger.SysLogf("request: %s", string(jsonBytes))
 	// 创建Nova请求结构
-	novaRequest := Request{
+	novaRequest := &Request{
 		InferenceConfig: InferenceConfig{
 			MaxNewTokens: request.MaxTokens,
 		},
